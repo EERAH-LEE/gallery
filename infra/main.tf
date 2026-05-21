@@ -1,5 +1,5 @@
 module "network" {
-  source    = "modules/network"
+  source    = "infra/modules/network"
   namespace = local.namespace
   region    = local.region
 }
