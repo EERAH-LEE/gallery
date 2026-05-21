@@ -1,13 +1,13 @@
-name: lab25 deploy
+name: deploy
 
 on:
   push: # push(=merge) 됐을 때
     branches: [main] # main에
-    paths: ["0520/lab25/*.tf"]      
+    paths: ["infra/*.tf"]      
 
 env:
   TF_VERSION: "1.14.7"
-  WORKING_DIR: "0520/lab25"           
+  WORKING_DIR: "infra"           
 
 jobs:
   apply:
