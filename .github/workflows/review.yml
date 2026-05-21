@@ -1,0 +1,37 @@
+name: lab25 review
+
+on:                                                          # 언제 실행할지
+  pull_request:                                              # PR일 때
+    branches: [main]                                         # main 브랜치를 대상으로 한 PR일 때만
+    types: [opened, synchronize]                             # PR 열렸을 때 OR 새 커밋 푸시됐을 때
+    paths: ["0520/lab25/*.tf"]                               # 이 경로의 .tf 파일이 변경됐을 때만
+
+env:
+  TF_VERSION: "1.14.7"                                      # 사용할 Terraform 버전
+  WORKING_DIR: "0520/lab25"                                  # 작업 디렉토리 경로
+
+jobs:
+  plan:                                               # job 이름(원하는 형태로 가능)
+    runs-on: ubuntu-latest                                   # GitHub이 제공하는 우분투 서버에서 실행
+    defaults:                                                # 모든 step의 기본 설정
+      run:
+        working-directory: ${{ env.WORKING_DIR }}            # 해당 폴더내에서 run 명령어 실행
+    steps:                                                   # 순서대로 실행
+      - name: Checkout                                       # github의 저장소 코드를 runner(우분투 서버)로 복사
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform                                # 테라폼 설치
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Init                                 # 테라폼 init
+        run: terraform init
+
+      - name: Terraform Plan                                 # 테라폼 plan
+        id: plan
+        run: terraform plan
+
+      - name: Fail if Plan Failed                            # plan 실패 시 강제 종료
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
