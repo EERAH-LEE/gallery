@@ -31,6 +31,6 @@ variable "infra_asg_desired_capacity" {
 }
 
 variable "infra_target_group_port" {
-  type = 8080
+  type = number
 }
 
