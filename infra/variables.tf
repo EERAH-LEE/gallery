@@ -14,15 +14,11 @@ variable "infra_lt_instance_type" {
   type = string
 }
 
-variable "infra_asg_deploy_version" {
-  type = string
-}
-
-variable "infra_asg_max_size" {
+variable "infra_asg_min_size" {
   type = number
 }
 
-variable "infra_asg_min_size" {
+variable "infra_asg_max_size" {
   type = number
 }
 
@@ -30,14 +26,6 @@ variable "infra_asg_desired_capacity" {
   type = number
 }
 
-variable "infra_db_username" {
+variable "infra_asg_deploy_version" {
   type = string
-}
-
-variable "infra_db_password" {
-  type = string
-}
-
-variable "infra_target_group_port" {
-  type = number
 }

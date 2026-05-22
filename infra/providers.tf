@@ -7,12 +7,9 @@ terraform {
       version = "~> 6.0"
     }
   }
-
-  # s3 bucket에 넣는거라서 상태파일이 안생김
-  # .terraform에 생긴 state file은 s3에 저장된 상태에 대한 정보
+  
   backend "s3" {
-    bucket       = "tf-user-tfstate" # bucket이름
-    key          = "lab23(gallery)/env:/dev/terraform.tfstate"
+    bucket       = "tf-core-tfstate-eerah"
     region       = "ap-northeast-2"
     encrypt      = true
     use_lockfile = true
@@ -26,8 +23,8 @@ provider "aws" {
     tags = {
       Organization = local.org
       Project      = local.project
+      Enviroment   = local.enviroment
       ManagedBy    = "Terraform"
-      Environment = local.environment
     }
   }
 }
