@@ -37,7 +37,7 @@ locals {
 
     user_data = base64encode(
       templatefile(
-        "../../modules/workload/templates/user_data.sh.tpl",
+        "./modules/workload/templates/user_data.sh.tpl",
         {
           # userdata 43번째줄 : 실행시킬 때 필요한 환경변수 값 넣어주기
           server_port = var.lt_service_port
