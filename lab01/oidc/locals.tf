@@ -3,7 +3,7 @@ locals {
   project   = "lab01"
   namespace = "${local.org}-${local.project}"
 
-  github_repo = "k0-zzang/gallery-k0"
+  github_repo = "bespin-multi-cloud-3-azure/gallery"
 
   iamrole = {
     name       = "pky"
