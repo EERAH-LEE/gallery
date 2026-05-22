@@ -4,7 +4,7 @@ on:                                                          # 언제 실행할�
   pull_request:                                              # PR일 때
     branches: [main]                                         # main 브랜치를 대상으로 한 PR일 때만
     types: [opened, synchronize]                             # PR 열렸을 때 OR 새 커밋 푸시됐을 때
-    paths: ["infra/*.tf"]                               # 이 경로의 .tf 파일이 변경됐을 때만
+    paths: ["lab01/infra/*.tf"]  #이거 경로 수정해야함 임의로 넣은거라
 
 permissions:
   contents: read
@@ -14,7 +14,7 @@ permissions:
 env:
   TF_VERSION: "1.14.7"                                       # 사용할 Terraform 버전
   AWS_REGION: "ap-northeast-2"
-  WORKING_DIR: "infra"                                  # 작업 디렉토리 경로
+  WORKING_DIR: "lab01/infra"                                  # 작업 디렉토리 경로
 
 jobs:
   lab25-cicd:                                               # job 이름(원하는 형태로 가능)
@@ -42,7 +42,7 @@ jobs:
 
       - name: Terraform Plan                                 # 테라폼 plan
         id: plan
-        run: terraform plan
+        run: terraform plan -input=false
 
       - name: Fail if Plan Failed                            # plan 실패 시 강제 종료
         if: steps.plan.outcome == 'failure'
