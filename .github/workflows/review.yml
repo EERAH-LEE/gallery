@@ -38,7 +38,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Init                                 # 테라폼 init
-        run: terraform init -backend-config="env.dev.backend.hcl"
+        run: terraform init -backend-config="env/dev.backend.hcl"
 
       - name: Terraform Plan                                 # 테라폼 plan
         id: plan
