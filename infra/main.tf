@@ -1,7 +1,7 @@
 module "network" {
-  source    = "infra/modules/network"
+  source    = "./modules/network"
   namespace = local.namespace
-  region    = local.region
+
 }
 
 # main에서 불러올 때 '-'는 마이너스 연산자로 들어가기 때문에 - 를 사용할 수 없다.
@@ -11,9 +11,8 @@ module "network" {
 # aws에서는 -를 이름에 사용하기 때문에 규칙을 지키기 위해서 다양한 방법 활용 가능
 # terraform 문법에서는 - 가 연산자 취급이 되어 사용 불가능
 module "platform" {
-  source    = "modules/platform"
+  source    = "./modules/platform"
   namespace = local.namespace
-  region    = local.region
   vpc_id    = module.network.vpc["main"].id
   lb_subnets = [
     # lb라서 pub만 필요
@@ -26,7 +25,7 @@ module "platform" {
 
 
 module "workload" {
-  source = "modules/workload"
+  source = "./modules/workload"
 
   namespace = local.namespace
   region    = local.region
