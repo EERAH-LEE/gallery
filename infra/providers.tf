@@ -11,7 +11,7 @@ terraform {
   # s3 bucket에 넣는거라서 상태파일이 안생김
   # .terraform에 생긴 state file은 s3에 저장된 상태에 대한 정보
   backend "s3" {
-    bucket       = "tf-user-tfstate" # bucket이름
+    bucket       = "tf-user-tfstate-eerah" # bucket이름
     key          = "lab23(gallery)/env:/dev/terraform.tfstate"
     region       = "ap-northeast-2"
     encrypt      = true
