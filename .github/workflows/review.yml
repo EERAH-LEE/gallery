@@ -4,7 +4,7 @@ on:                                                          # 언제 실행할�
   pull_request:                                              # PR일 때
     branches: [main]                                         # main 브랜치를 대상으로 한 PR일 때만
     types: [opened, synchronize]                             # PR 열렸을 때 OR 새 커밋 푸시됐을 때
-    paths: ["lab01/infra/*.tf"]  #이거 경로 수정해야함 임의로 넣은거라
+    paths: ["infra/**"]  #이거 경로 수정해야함 임의로 넣은거라
 
 permissions:
   contents: read
@@ -14,7 +14,7 @@ permissions:
 env:
   TF_VERSION: "1.14.7"                                       # 사용할 Terraform 버전
   AWS_REGION: "ap-northeast-2"
-  WORKING_DIR: "lab01/infra"                                  # 작업 디렉토리 경로
+  WORKING_DIR: "infra"                                  # 작업 디렉토리 경로
 
 jobs:
   lab25-cicd:                                               # job 이름(원하는 형태로 가능)
@@ -38,11 +38,48 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Init                                 # 테라폼 init
-        run: terraform init
+        run: terraform init -backend-config="env.dev.backend.hcl"
 
       - name: Terraform Plan                                 # 테라폼 plan
         id: plan
-        run: terraform plan -input=false
+        run: terraform plan -input=false -no-color -var-file="env.dev.tfvars"
+
+      - name: Post Plan to PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Plan
+            \`\`\`
+            ${{ steps.plan.outputs.stdout }}
+            \`\`\`
+            *Triggered by @${{ github.actor }}*`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const botComment = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('Terraform Plan')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: output
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: output
+              });
+            }
+
+
 
       - name: Fail if Plan Failed                            # plan 실패 시 강제 종료
         if: steps.plan.outcome == 'failure'

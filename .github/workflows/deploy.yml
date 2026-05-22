@@ -3,7 +3,7 @@ name: deploy
 on:
   push: # push(=merge) 됐을 때
     branches: [main] # main에
-    paths: ["lab01/infra/*.tf"]  #이거 경로 수정해야함 임의로 넣은거라
+    paths: ["infra/**"]  #이거 경로 수정해야함 임의로 넣은거라
 
 permissions:
   contents: read
