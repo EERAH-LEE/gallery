@@ -30,14 +30,7 @@ variable "infra_asg_desired_capacity" {
   type = number
 }
 
-variable "infra_db_username" {
-  type = string
-}
-
-variable "infra_db_password" {
-  type = string
-}
-
 variable "infra_target_group_port" {
-  type = number
+  type = 8080
 }
+
