@@ -15,17 +15,17 @@ sudo -u ec2-user bash -lc "
 set -euo pipefail
 cd /home/ec2-user
 rm -rf workspace
-git clone --filter=blob:none --sparse https://github.com/cloud-sue/terraform_class.git workspace
+git clone --filter=blob:none --sparse https://github.com/EERAH-LEE/tf-core.git workspace
 cd workspace
 git sparse-checkout init --no-cone
-git sparse-checkout set gallery-spring-boot
-cd gallery-spring-boot
+git sparse-checkout set workloads/gallery-spring-boot
+cd workloads/gallery-spring-boot
 chmod +x ./mvnw
 ./mvnw clean package -DskipTests -Dbuild.finalName=gallery
 "
 
 # 4. JAR 복사
-cp "$${REPO_DIR}/gallery-spring-boot/target/gallery.jar" "$${APP_DIR}/gallery.jar"
+cp "$${REPO_DIR}/workloads/gallery-spring-boot/target/gallery.jar" "$${APP_DIR}/gallery.jar"
 chown ec2-user:ec2-user "$${APP_DIR}/gallery.jar"
 
 # 5. systemd 서비스 등록
