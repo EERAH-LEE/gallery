@@ -45,3 +45,19 @@ module "workload" {
 
   lt_instance_type = local.infra.lt.instance_type
 }
+
+check "gallery_health" {
+  data "http" "app" {
+    url = "${lower(module.platform.lb["main"].listener.protocol)}://${module.platform.lb["main"].dns_name}:${module.platform.lb["main"].listener.port}${module.platform.lb["main"].target_group.health_check.path}"
+  }
+
+  assert {
+    condition     = data.http.app.status_code == 200
+    error_message = "Gallery 앱이 정상 응답하지 않는다: ${data.http.app.url}"
+  }
+
+  assert {
+    condition     = jsondecode(data.http.app.response_body).status == "UP"
+    error_message = "Gallery 앱 상태가 UP이 아니다."
+  }
+}
